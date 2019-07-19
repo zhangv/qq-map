@@ -1,0 +1,38 @@
+{
+  "name": "zhangv/qq-map",
+  "description": "The simplest QQ lbs/map",
+  "keywords": ["lbs","qq","tencent","map","qqmap"],
+  "homepage": "https://github.com/zhangv/qq-map",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "ZhangV",
+      "email": "derekzhangv@gmail.com",
+      "homepage": "https://zhangv.com",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "source": "https://github.com/zhangv/qq-map",
+    "issues": "https://github.com/zhangv/qq-map/issues"
+  },
+  "require": {
+    "php": ">=7.0",
+    "ext-json": "*",
+    "ext-curl": "*",
+    "ext-simplexml": "*",
+    "ext-openssl": "*"
+  },
+  "require-dev": {
+    "php": ">=7.0",
+    "phpunit/phpunit": "^6.5.8",
+    "squizlabs/php_codesniffer": "^2.7",
+    "phpmd/phpmd": "^2.4",
+    "sebastian/phpcpd": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "zhangv\\qq\\map\\": "src/"
+    }
+  }
+}
