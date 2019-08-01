@@ -1,7 +1,6 @@
 <?php
 /**
- * 行政区划
- * @link https://lbs.qq.com/webservice_v1/guide-region.html
+ * 地址解析
  */
 
 namespace zhangv\qq\map\service;
@@ -12,15 +11,17 @@ class GeoCoder extends QQMap {
 
 	/**
 	 * 输入坐标返回地理位置信息和附近poi列表
+	 * @link https://lbs.qq.com/webservice_v1/guide-gcoder.html
 	 */
-	public function location($latlng){
+	public function getByLocation($latlng){
 		return $this->get("ws/geocoder/v1/",['location' => $latlng]);
 	}
 
 	/**
 	 * 由地址描述到所述位置坐标的转换
+	 * @link https://lbs.qq.com/webservice_v1/guide-geocoder.html
 	 */
-	public function address($address){
+	public function getByAddress($address){
 		return $this->get("ws/geocoder/v1/",['address' => $address]);
 	}
 

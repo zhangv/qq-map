@@ -1,7 +1,7 @@
 <?php
 /**
- * 行政区划
- * @link https://lbs.qq.com/webservice_v1/guide-region.html
+ * 路线规划
+ * @link https://lbs.qq.com/webservice_v1/guide-road.html
  */
 
 namespace zhangv\qq\map\service;
@@ -9,6 +9,7 @@ namespace zhangv\qq\map\service;
 use zhangv\qq\map\QQMap;
 
 class Direction extends QQMap {
+	const MODE_DRIVING = 'driving',MODE_WALKING = 'walking', MODE_BICYCLING = 'bicycling', MODE_TRANSIT = 'transit';
 
 	/**
 	 * 驾车（driving）路线规划

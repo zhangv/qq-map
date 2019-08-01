@@ -64,9 +64,10 @@ class QQMap {
 		if(!$content) throw new \Exception("Empty response");
 
 		$json = json_decode($content);
+
 		if($json->status !== 0){
-			throw new \Exception($json->message);
+			throw new \Exception("[$json->status]{$json->message}");
 		}
-		return $json->result;
+		return empty($json->result)?empty($json->detail)?$json->data:$json->detail:$json->result;
 	}
 }

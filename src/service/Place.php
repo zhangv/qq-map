@@ -1,7 +1,6 @@
 <?php
 /**
- * 行政区划
- * @link https://lbs.qq.com/webservice_v1/guide-region.html
+ * 地点
  */
 
 namespace zhangv\qq\map\service;
@@ -12,6 +11,7 @@ class Place extends QQMap {
 
 	/**
 	 * 地点搜索
+	 * @link https://lbs.qq.com/webservice_v1/guide-search.html
 	 * @param $keyword
 	 * @param $boundary https://lbs.qq.com/webservice_v1/guide-search.html#boundary_detail
 	 * @param null $filter https://lbs.qq.com/webservice_v1/guide-search.html#filter_detail
@@ -34,6 +34,22 @@ class Place extends QQMap {
 			'output' => $output,
 			'callback' => $callback,
 		]);
+	}
+
+	/**
+	 * 搜索提示
+	 * @link https://lbs.qq.com/webservice_v1/guide-suggestion.html
+	 * @param $keyword
+	 * @param $region
+	 * @param array $ext
+	 * @return mixed
+	 * @throws \Exception
+	 */
+	public function suggestion($keyword,$region,$ext = []){
+		return $this->get("ws/place/v1/suggestion",array_merge([
+			'keyword' => $keyword,
+			'region' => $region,
+		],$ext));
 	}
 
 }

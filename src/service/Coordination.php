@@ -1,7 +1,7 @@
 <?php
 /**
- * 行政区划
- * @link https://lbs.qq.com/webservice_v1/guide-region.html
+ * 坐标转换
+ * @link https://lbs.qq.com/webservice_v1/guide-convert.html
  */
 
 namespace zhangv\qq\map\service;

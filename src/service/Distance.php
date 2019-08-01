@@ -1,7 +1,7 @@
 <?php
 /**
- * 行政区划
- * @link https://lbs.qq.com/webservice_v1/guide-region.html
+ * 距离计算
+ * @link https://lbs.qq.com/webservice_v1/guide-distance.html
  */
 
 namespace zhangv\qq\map\service;
@@ -9,8 +9,8 @@ namespace zhangv\qq\map\service;
 use zhangv\qq\map\QQMap;
 
 class Distance extends QQMap {
-
-	public function getDistance($mode,$from,$to,$ext = []){
+	const MODE_DRIVING = 'driving',MODE_WALKING = 'walking';
+	public function getDistance($from,$to,$mode = self::MODE_DRIVING, $ext = []){
 		return $this->get("ws/distance/v1",array_merge([
 			'mode' => $mode,
 			'from' => $from,
@@ -18,7 +18,16 @@ class Distance extends QQMap {
 		],$ext));
 	}
 
-	public function matrix($mode,$from,$to,$ext = []){
+	/**
+	 * @param $mode
+	 * @param $from
+	 * @param $to
+	 * @param array $ext
+	 * @return mixed
+	 * @throws \Exception
+	 * @link https://lbs.qq.com/webservice_v1/guide-distancematrix.html
+	 */
+	public function matrix($from,$to,$mode = self::MODE_DRIVING, $ext = []){
 		return $this->get("ws/distance/v1/matrix",array_merge([
 			'mode' => $mode,
 			'from' => $from,
