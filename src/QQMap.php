@@ -8,27 +8,30 @@ namespace zhangv\qq\map;
  * @author zhangv
  * @license MIT
  *
- * @method static service\District      District(string $key)
- * @method static service\Place         Place(string $key)
- * @method static service\GeoCoder      GeoCoder(string $key)
- * @method static service\Direction     Direction(string $key)
- * @method static service\Distance      Distance(string $key)
- * @method static service\Coordination  Coordination(string $key)
- * @method static service\Location      Location(string $key)
- * @method static service\StreetView    StreetView(string $key)
- * @method static service\StaticMap     StaticMap(string $key)
+ * @method static service\District      District($key,$secretKey = null)
+ * @method static service\Place         Place($key,$secretKey = null)
+ * @method static service\GeoCoder      GeoCoder($key,$secretKey = null)
+ * @method static service\Direction     Direction($key,$secretKey = null)
+ * @method static service\Distance      Distance($key,$secretKey = null)
+ * @method static service\Coordination  Coordination($key,$secretKey = null)
+ * @method static service\Location      Location($key,$secretKey = null)
+ * @method static service\StreetView    StreetView($key,$secretKey = null)
+ * @method static service\StaticMap     StaticMap($key,$secretKey = null)
  */
 class QQMap {
-	public $key;
-	public $httpClient;
+	protected $key;
+	protected $secretKey;
+	protected $httpClient;
 
 	const ENDPOINT = "https://apis.map.qq.com/";
 
 	/**
 	 * @param $key string API密钥
+	 * @param $secretKey string 签名密钥
 	 */
-	protected function __construct($key) {
+	protected function __construct($key,$secretKey = null) {
 		$this->key = $key;
+		$this->secretKey = $secretKey;
 		$this->httpClient = new HttpClient(5);
 	}
 
@@ -37,9 +40,9 @@ class QQMap {
 	 * @param string $config
 	 * @return mixed
 	 */
-	private static function load($name, $config) {
+	private static function load($name, $key,$secretKey = null) {
 		$service = __NAMESPACE__ . "\\service\\{$name}";
-		return new $service($config);
+		return new $service($key,$secretKey);
 	}
 
 	/**
@@ -52,7 +55,7 @@ class QQMap {
 		return self::load($name, ...$config);
 	}
 
-	protected function get($url, $data = []) {
+	public function get($url, $data = []) {
 		$opts = [
 			CURLOPT_SSL_VERIFYPEER => false,
 			CURLOPT_SSL_VERIFYHOST => false,
@@ -60,6 +63,12 @@ class QQMap {
 			CURLOPT_TIMEOUT => 10
 		];
 		$params = array_merge($data,['key'=>$this->key]);
+
+		if($this->secretKey){
+			$signature = $this->createSignature($url,$params);
+			$params['sig'] = $signature;
+		}
+
 		$content = $this->httpClient->get(self::ENDPOINT . $url,$params,$opts);
 		if(!$content) throw new \Exception("Empty response");
 
@@ -69,5 +78,16 @@ class QQMap {
 			throw new \Exception("[$json->status]{$json->message}");
 		}
 		return empty($json->result)?empty($json->detail)?$json->data:$json->detail:$json->result;
+	}
+
+	protected function createSignature($url,$params){
+		ksort($params);
+		$tmp = [];
+		foreach($params as $k => $v){
+			$tmp[] = "{$k}=${v}";
+		}
+		$tmp = implode('&',$tmp);
+		$str = "/{$url}?{$tmp}{$this->secretKey}";
+		return md5($str);
 	}
 }
