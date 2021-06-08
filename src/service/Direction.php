@@ -11,8 +11,14 @@ use zhangv\qq\map\QQMap;
 class Direction extends QQMap {
 	const MODE_DRIVING = 'driving',MODE_WALKING = 'walking', MODE_BICYCLING = 'bicycling', MODE_TRANSIT = 'transit';
 
+	public function getDirection($from,$to,$type,$ext = []){
+		return $this->get("ws/direction/v1/$type",array_merge([
+			'from' => $from,
+			'to' => $to
+		],$ext));
+	}
 	/**
-	 * 驾车（driving）路线规划
+	 * 驾车路线规划
 	 * @param $from
 	 * @param $to
 	 * @param array $ext
@@ -20,31 +26,43 @@ class Direction extends QQMap {
 	 * @throws \Exception
 	 */
 	public function driving($from,$to,$ext = []){
-		return $this->get("ws/direction/v1/driving",array_merge([
-			'from' => $from,
-			'to' => $to
-		],$ext));
+		return $this->getDirection($from,$to,self::MODE_DRIVING);
 	}
 
+	/**
+	 * 步行路线规划
+	 * @param $from
+	 * @param $to
+	 * @param array $ext
+	 * @return mixed
+	 * @throws \Exception
+	 */
 	public function walking($from,$to,$ext = []){
-		return $this->get("ws/direction/v1/walking",array_merge([
-			'from' => $from,
-			'to' => $to
-		],$ext));
+		return $this->getDirection($from,$to,self::MODE_WALKING);
 	}
 
+	/**
+	 * 骑行路线规划
+	 * @param $from
+	 * @param $to
+	 * @param array $ext
+	 * @return mixed
+	 * @throws \Exception
+	 */
 	public function bicycling($from,$to,$ext = []){
-		return $this->get("ws/direction/v1/bicycling",array_merge([
-			'from' => $from,
-			'to' => $to
-		],$ext));
+		return $this->getDirection($from,$to,self::MODE_BICYCLING);
 	}
 
+	/**
+	 * 公共交通路线规划
+	 * @param $from
+	 * @param $to
+	 * @param array $ext
+	 * @return mixed
+	 * @throws \Exception
+	 */
 	public function transit($from,$to,$ext = []){
-		return $this->get("ws/direction/v1/transit",array_merge([
-			'from' => $from,
-			'to' => $to
-		],$ext));
+		return $this->getDirection($from,$to,self::MODE_TRANSIT);
 	}
 
 }
