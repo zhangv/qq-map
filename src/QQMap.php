@@ -1,4 +1,5 @@
 <?php
+
 namespace zhangv\qq\map;
 
 
@@ -29,7 +30,7 @@ class QQMap {
 	 * @param $key string API密钥
 	 * @param $secretKey string 签名密钥
 	 */
-	protected function __construct($key,$secretKey = null) {
+	protected function __construct($key, $secretKey = null) {
 		$this->key = $key;
 		$this->secretKey = $secretKey;
 		$this->httpClient = new HttpClient(5);
@@ -40,9 +41,9 @@ class QQMap {
 	 * @param string $config
 	 * @return mixed
 	 */
-	private static function load($name, $key,$secretKey = null) {
+	private static function load($name, $key, $secretKey = null) {
 		$service = __NAMESPACE__ . "\\service\\{$name}";
-		return new $service($key,$secretKey);
+		return new $service($key, $secretKey);
 	}
 
 	/**
@@ -62,31 +63,31 @@ class QQMap {
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_TIMEOUT => 10
 		];
-		$params = array_merge($data,['key'=>$this->key]);
+		$params = array_merge($data, ['key' => $this->key]);
 
-		if($this->secretKey){
-			$signature = $this->createSignature($url,$params);
+		if ($this->secretKey) {
+			$signature = $this->createSignature($url, $params);
 			$params['sig'] = $signature;
 		}
 
-		$content = $this->httpClient->get(self::ENDPOINT . $url,$params,$opts);
-		if(!$content) throw new \Exception("Empty response");
+		$content = $this->httpClient->get(self::ENDPOINT . $url, $params, $opts);
+		if (!$content) throw new \Exception("Empty response");
 
 		$json = json_decode($content);
 
-		if($json->status !== 0){
+		if ($json->status !== 0) {
 			throw new \Exception("[$json->status]{$json->message}");
 		}
-		return empty($json->result)?empty($json->detail)?$json->data:$json->detail:$json->result;
+		return empty($json->result) ? empty($json->detail) ? $json->data : $json->detail : $json->result;
 	}
 
-	protected function createSignature($url,$params){
+	protected function createSignature($url, $params) {
 		ksort($params);
 		$tmp = [];
-		foreach($params as $k => $v){
-			$tmp[] = "{$k}=${v}";
+		foreach ($params as $k => $v) {
+			$tmp[] = "{$k}={$v}";
 		}
-		$tmp = implode('&',$tmp);
+		$tmp = implode('&', $tmp);
 		$str = "/{$url}?{$tmp}{$this->secretKey}";
 		return md5($str);
 	}
