@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 距离计算
  * @link https://lbs.qq.com/webservice_v1/guide-distance.html
@@ -9,13 +10,20 @@ namespace zhangv\qq\map\service;
 use zhangv\qq\map\QQMap;
 
 class Distance extends QQMap {
-	const MODE_DRIVING = 'driving',MODE_WALKING = 'walking';
-	public function getDistance($from,$to,$mode = self::MODE_DRIVING, $ext = []){
-		return $this->get("ws/distance/v1",array_merge([
+	const MODE_DRIVING = 'driving', MODE_WALKING = 'walking', MODE_BICYCLING = 'bicycling', MODE_TRANSIT = 'transit';
+	public function getDistance($from, $to, $mode = self::MODE_DRIVING, $ext = []) {
+		return $this->get("ws/distance/v1/matrix", array_merge([
 			'mode' => $mode,
 			'from' => $from,
 			'to' => $to
-		],$ext));
+		], $ext));
+	}
+	public function getDistanceOld($from, $to, $mode = self::MODE_DRIVING, $ext = []) {
+		return $this->get("ws/distance/v1", array_merge([
+			'mode' => $mode,
+			'from' => $from,
+			'to' => $to
+		], $ext));
 	}
 
 	/**
@@ -27,13 +35,11 @@ class Distance extends QQMap {
 	 * @throws \Exception
 	 * @link https://lbs.qq.com/webservice_v1/guide-distancematrix.html
 	 */
-	public function matrix($from,$to,$mode = self::MODE_DRIVING, $ext = []){
-		return $this->get("ws/distance/v1/matrix",array_merge([
+	public function matrix($from, $to, $mode = self::MODE_DRIVING, $ext = []) {
+		return $this->get("ws/distance/v1/matrix", array_merge([
 			'mode' => $mode,
 			'from' => $from,
 			'to' => $to
-		],$ext));
+		], $ext));
 	}
-
-
 }
